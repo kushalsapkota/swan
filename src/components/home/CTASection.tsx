@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Heart, Users, UserPlus, Handshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const ctaActions = [
   {
@@ -79,37 +80,39 @@ export default function CTASection() {
               whileTap={{ scale: 0.98 }}
               className="flex-1 min-w-[140px] sm:min-w-[160px] max-w-[200px] sm:max-w-none"
             >
-              <Button
-                variant={action.variant === 'hero' ? 'hero' : 'heroOutline'}
-                size="lg"
-                className={`w-full h-auto py-4 sm:py-5 md:py-6 px-4 sm:px-6 flex flex-col items-center justify-center gap-2 transition-all duration-300 ${
-                  action.variant === 'heroOutline'
-                    ? 'border-2 border-white/40 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 hover:border-white/60 hover:shadow-lg hover:shadow-white/20'
-                    : 'bg-white text-primary hover:bg-white/95 hover:shadow-xl hover:shadow-white/30'
-                }`}
-              >
-                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center ${
-                  action.variant === 'hero'
-                    ? 'bg-primary/10'
-                    : 'bg-white/10'
-                }`}>
-                  <action.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${
-                    action.variant === 'hero' ? 'text-primary' : 'text-white'
-                  }`} />
-                </div>
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className={`font-bold text-sm sm:text-base md:text-lg ${
-                    action.variant === 'hero' ? 'text-primary' : 'text-white'
+              <Link to={action.label === 'Donate Now' ? '/donate' : action.label === 'Volunteer' ? '/volunteer' : '/get-involved'}>
+                <Button
+                  variant={action.variant === 'hero' ? 'hero' : 'heroOutline'}
+                  size="lg"
+                  className={`w-full h-auto py-4 sm:py-5 md:py-6 px-4 sm:px-6 flex flex-col items-center justify-center gap-2 transition-all duration-300 ${
+                    action.variant === 'heroOutline'
+                      ? 'border-2 border-white/40 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 hover:border-white/60 hover:shadow-lg hover:shadow-white/20'
+                      : 'bg-white text-primary hover:bg-white/95 hover:shadow-xl hover:shadow-white/30'
+                  }`}
+                >
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center ${
+                    action.variant === 'hero'
+                      ? 'bg-primary/10'
+                      : 'bg-white/10'
                   }`}>
-                    {action.label}
-                  </span>
-                  <span className={`text-[10px] sm:text-xs opacity-80 font-normal text-center leading-tight ${
-                    action.variant === 'hero' ? 'text-primary/80' : 'text-white/80'
-                  }`}>
-                    {action.description}
-                  </span>
-                </div>
-              </Button>
+                    <action.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${
+                      action.variant === 'hero' ? 'text-primary' : 'text-white'
+                    }`} />
+                  </div>
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className={`font-bold text-sm sm:text-base md:text-lg ${
+                      action.variant === 'hero' ? 'text-primary' : 'text-white'
+                    }`}>
+                      {action.label}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs opacity-80 font-normal text-center leading-tight ${
+                      action.variant === 'hero' ? 'text-primary/80' : 'text-white/80'
+                    }`}>
+                      {action.description}
+                    </span>
+                  </div>
+                </Button>
+              </Link>
             </motion.div>
           ))}
         </motion.div>

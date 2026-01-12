@@ -1,8 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import {
   MapPin, Mail, Phone, Clock, Send,
   Facebook, Twitter, Linkedin, Instagram, Youtube
@@ -57,6 +60,47 @@ function AnimatedSection({ children, className = '' }: { children: React.ReactNo
 }
 
 export default function Contact() {
+  const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      toast({
+        title: 'Missing information',
+        description: 'Please fill in your name, email, and message.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    setTimeout(() => {
+      setSubmitting(false);
+      setForm({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+      });
+      toast({
+        title: 'Message sent',
+        description: 'Thank you for reaching out. Our team will get back to you soon.',
+      });
+    }, 400);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -106,28 +150,30 @@ export default function Contact() {
               <AnimatedSection>
                 <div className="glass-card p-4 sm:p-6 lg:p-8 xl:p-10">
                   <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Send Us a Message</h2>
-                  <form className="space-y-4 sm:space-y-6" onSubmit={(e) => e.preventDefault()}>
+                  <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium mb-2">
                           Full Name
                         </label>
-                        <input
+                        <Input
                           type="text"
                           id="name"
                           placeholder="Your name"
-                          className="w-full px-4 py-3 rounded-xl border border-border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          value={form.name}
+                          onChange={handleChange}
                         />
                       </div>
                       <div>
                         <label htmlFor="email" className="block text-sm font-medium mb-2">
                           Email Address
                         </label>
-                        <input
+                        <Input
                           type="email"
                           id="email"
                           placeholder="you@example.com"
-                          className="w-full px-4 py-3 rounded-xl border border-border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          value={form.email}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -135,27 +181,30 @@ export default function Contact() {
                       <label htmlFor="subject" className="block text-sm font-medium mb-2">
                         Subject
                       </label>
-                      <input
+                      <Input
                         type="text"
                         id="subject"
                         placeholder="How can we help?"
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                        value={form.subject}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium mb-2">
                         Message
                       </label>
-                      <textarea
+                      <Textarea
                         id="message"
                         rows={5}
                         placeholder="Tell us more about your inquiry..."
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
+                        value={form.message}
+                        onChange={handleChange}
+                        className="resize-none"
                       />
                     </div>
-                    <Button variant="hero" size="lg" className="w-full sm:w-auto">
+                    <Button type="submit" variant="hero" size="lg" className="w-full sm:w-auto" disabled={submitting}>
                       <Send className="w-4 h-4" />
-                      Send Message
+                      {submitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </form>
                 </div>

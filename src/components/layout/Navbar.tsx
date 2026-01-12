@@ -10,7 +10,9 @@ const navLinks = [
   { name: 'About Us', path: '/about' },
   { name: 'Programs', path: '/programs' },
   { name: 'Get Involved', path: '/get-involved' },
+  { name: 'Volunteer', path: '/volunteer' },
   { name: 'Contact', path: '/contact' },
+  // Admin is intentionally hidden from the public navbar
 ];
 
 export default function Navbar() {
@@ -82,10 +84,12 @@ export default function Navbar() {
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <Button variant="hero" size="sm" className="gap-2">
-              <Heart className="w-4 h-4" />
-              Donate Now
-            </Button>
+            <Link to="/donate">
+              <Button variant="hero" size="sm" className="gap-2">
+                <Heart className="w-4 h-4" />
+                Donate Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -139,10 +143,12 @@ export default function Navbar() {
                 ))}
               </div>
               <div className="mt-6 sm:mt-8 flex flex-col gap-3">
-                <Button variant="hero" className="w-full gap-2" size="lg">
-                  <Heart className="w-4 h-4" />
-                  Donate Now
-                </Button>
+                <Link to="/donate">
+                  <Button variant="hero" className="w-full gap-2" size="lg">
+                    <Heart className="w-4 h-4" />
+                    Donate Now
+                  </Button>
+                </Link>
                 <button
                   onClick={toggleTheme}
                   className="flex items-center justify-center gap-2 p-3 rounded-xl border border-border hover:bg-muted transition-colors text-sm sm:text-base"

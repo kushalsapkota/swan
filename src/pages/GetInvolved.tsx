@@ -7,6 +7,7 @@ import {
   Heart, Users, UserPlus, Handshake, ArrowRight,
   DollarSign, Clock, Briefcase, Gift
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const involvementOptions = [
   {
@@ -140,10 +141,12 @@ export default function GetInvolved() {
                       ))}
                     </ul>
                     
-                    <Button variant="heroOutline" size="lg" className="w-full sm:w-auto group/btn">
-                      {option.cta}
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Button>
+                    <Link to={option.title === 'Donate' ? '/donate' : option.title === 'Volunteer' ? '/volunteer' : '/get-involved'}>
+                      <Button variant="heroOutline" size="lg" className="w-full sm:w-auto group/btn">
+                        {option.cta}
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                      </Button>
+                    </Link>
                   </motion.div>
                 </AnimatedSection>
               ))}
@@ -174,10 +177,12 @@ export default function GetInvolved() {
                     </div>
                     <div className="text-base sm:text-lg font-semibold mb-2 sm:mb-3">{tier.label}</div>
                     <p className="text-muted-foreground text-xs sm:text-sm flex-1 mb-4">{tier.description}</p>
-                    <Button variant="hero" size="sm" className="w-full mt-auto">
-                      <Gift className="w-4 h-4" />
-                      Give
-                    </Button>
+                    <Link to="/donate">
+                      <Button variant="hero" size="sm" className="w-full mt-auto">
+                        <Gift className="w-4 h-4" />
+                        Give
+                      </Button>
+                    </Link>
                   </motion.div>
                 </AnimatedSection>
               ))}

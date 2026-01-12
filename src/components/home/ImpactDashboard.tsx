@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Calendar, FileCheck, MapPin, Globe, Target } from 'lucide-react';
-
+import * as Icons from 'lucide-react';
+import { loadAdminContent, resolveLucideIcon } from '@/lib/admin-content';
 
 function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -94,25 +94,11 @@ function StatCard({ icon: Icon, value, label, suffix = '', delay = 0, isText = f
   );
 }
 
-const stats: {
-  icon: React.ElementType;
-  value: string | number;
-  label: string;
-  suffix?: string;
-  isDate?: boolean;
-  isNumber?: boolean;
-  isText?: boolean;
-}[] = [
-    { icon: Calendar, value: 'Oct 2025', label: 'Established', isDate: false },
-    { icon: FileCheck, value: '377033', label: 'Registration No.', isNumber: false },
-    { icon: MapPin, value: 'Kathmandu', label: 'Headquarters', isText: true },
-    { icon: Globe, value: 'National & International', label: 'Reach', isText: true },
-    { icon: Target, value: 5, label: 'Focus Areas', suffix: '+' },
-  ];
-
 export default function ImpactDashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const content = loadAdminContent();
+  const section = content.impactDashboard;
 
   return (
     <section className="section-padding bg-gradient-to-b from-background to-muted/30 relative overflow-visible">
@@ -128,31 +114,36 @@ export default function ImpactDashboard() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 md:mb-16 px-4"
         >
-          <span className="text-primary font-medium text-xs sm:text-sm uppercase tracking-wider">Our Impact</span>
+          <span className="text-primary font-medium text-xs sm:text-sm uppercase tracking-wider">
+            {section.sectionBadge}
+          </span>
           <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mt-2 sm:mt-3 mb-3 sm:mb-4 leading-tight px-2">
-            Live Impact Dashboard
+            {section.sectionTitle}
           </h2>
           <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
-            Real-time overview of our foundation's reach and commitment to creating lasting change in communities.
+            {section.sectionDescription}
           </p>
         </motion.div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3 md:gap-4 lg:gap-5 px-2 sm:px-4 md:px-0">
-          {stats.map((stat, index) => (
-            <div key={stat.label} className="overflow-visible min-w-0">
-              <StatCard
-                icon={stat.icon}
-                value={stat.value}
-                label={stat.label}
-                suffix={stat.suffix}
-                delay={index * 0.1}
-                isDate={stat.isDate}
-                isNumber={stat.isNumber}
-                isText={stat.isText}
-              />
-            </div>
-          ))}
+          {section.stats.map((stat, index) => {
+            const Icon = resolveLucideIcon(Icons, stat.icon);
+            return (
+              <div key={stat.id} className="overflow-visible min-w-0">
+                <StatCard
+                  icon={Icon}
+                  value={stat.value}
+                  label={stat.label}
+                  suffix={stat.suffix}
+                  delay={index * 0.1}
+                  isDate={false}
+                  isNumber={typeof stat.value === 'number'}
+                  isText={typeof stat.value === 'string'}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
